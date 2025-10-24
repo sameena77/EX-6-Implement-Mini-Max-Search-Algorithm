@@ -1,6 +1,6 @@
 <h1>ExpNo 6 : Implement Minimax Search Algorithm for a Simple TIC-TAC-TOE game</h1> 
-<h3>Name:      </h3>
-<h3>Register Number:       </h3>
+<h3>Name:   SAMEENA J   </h3>
+<h3>Register Number:   2305002019    </h3>
 <H3>Aim:</H3>
 <p>
     Implement Minimax Search Algorithm for a Simple TIC-TAC-TOE game
@@ -102,51 +102,73 @@ def minimax(game)
     end
 end
 ## program
-```python
+```
 import math
 
-def minimax(curDepth, nodeIndex, maxTurn, scores, targetDepth, alpha, beta):
-    # Base case: targetDepth reached
-    if curDepth == targetDepth:
-        return scores[nodeIndex]
+board = [" "] * 9
+win_pos = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]]
 
-    if maxTurn:
-        maxEval = -math.inf  # Initialize maximum evaluation
-        # Maximizing player's turn
-        for i in range(2):  # There are two children for each node
-            eval = minimax(curDepth + 1, nodeIndex * 2 + i, False, scores, targetDepth, alpha, beta)
-            maxEval = max(maxEval, eval)
-            alpha = max(alpha, eval)  # Update alpha
-            if beta <= alpha:  # Beta pruning
-                break
-        return maxEval
-    else:
-        minEval = math.inf  # Initialize minimum evaluation
-        # Minimizing player's turn
-        for i in range(2):  # There are two children for each node
-            eval = minimax(curDepth + 1, nodeIndex * 2 + i, True, scores, targetDepth, alpha, beta)
-            minEval = min(minEval, eval)
-            beta = min(beta, eval)  # Update beta
-            if beta <= alpha:  # Alpha pruning
-                break
-        return minEval
 
- scores = [3, 5, 6, 9, 1, 2, 0, -1]
-    targetDepth = 3  # Example target depth
+def show():
+    print(f"\n{board[0]}|{board[1]}|{board[2]}\n-+-+-\n{board[3]}|{board[4]}|{board[5]}\n-+-+-\n{board[6]}|{board[7]}|{board[8]}\n")
 
-    # Start Minimax from the root with initial alpha and beta values
-    best_value = minimax(0, 0, True, scores, targetDepth, -math.inf, math.inf)
-    print("The optimal value is:", best_value)
+
+def winner():
+    for x,y,z in win_pos:
+        if board[x]==board[y]==board[z]!=" ": return board[x]
+    return "Draw" if " " not in board else None
+
+
+def mini(max_turn):
+    res = winner()
+    if res=="O": return 1
+    if res=="X": return -1
+    if res=="Draw": return 0
+    best = -math.inf if max_turn else math.inf
+    for i in range(9):
+        if board[i]==" ":
+            board[i] = "O" if max_turn else "X"
+            score = mini(not max_turn)
+            board[i] = " "
+            best = max(best, score) if max_turn else min(best, score)
+    return best
+
+
+def move():
+    best, mv = -math.inf, None
+    for i in range(9):
+        if board[i]==" ":
+            board[i] = "O"
+            score = mini(False)
+            board[i] = " "
+            if score > best: best, mv = score, i
+    return mv
+
+
+print("Tic Tac Toe (You:X  Computer:O)")
+show()
+while True:
+    try:
+        p = int(input("Enter position (1-9): "))-1
+        if board[p]!=" ": print("Taken!"); continue
+    except: print("Invalid!"); continue
+    board[p] = "X"; show()
+    if winner(): break
+    print("Computer thinking...")
+    board[move()] = "O"; show()
+    if winner(): break
+
+res = winner()
+print("Draw!" if res=="Draw" else f"{res} wins!"
 ```
+
 
 <hr>
 <h2>Sample Input and Output</h2>
 
-![image](https://github.com/natsaravanan/19AI405FUNDAMENTALSOFARTIFICIALINTELLIGENCE/assets/87870499/6b668685-8bcc-43c5-b5c2-ddd43f3da84a)
-![image](https://github.com/natsaravanan/19AI405FUNDAMENTALSOFARTIFICIALINTELLIGENCE/assets/87870499/8ca1b08a-8312-4ef5-89df-e69b7b2c3fa2)
-![image](https://github.com/natsaravanan/19AI405FUNDAMENTALSOFARTIFICIALINTELLIGENCE/assets/87870499/dc06427a-d4ce-43a1-95bd-9acfaefac323)
-![image](https://github.com/natsaravanan/19AI405FUNDAMENTALSOFARTIFICIALINTELLIGENCE/assets/87870499/a8a27e2a-6fd4-46a2-afb5-6d27b8556702)
-![image](https://github.com/natsaravanan/19AI405FUNDAMENTALSOFARTIFICIALINTELLIGENCE/assets/87870499/a2acb6a1-ed8e-42e5-8968-fe805e4b0255)
+![9b877b5c-fed6-412c-8d19-9fa9d518426a](https://github.com/user-attachments/assets/9008a75c-f2f6-4662-ac40-701d887dca58)
+![5265206c-db9f-40a1-87ca-c35e8def8bbc](https://github.com/user-attachments/assets/40d63994-9c62-4ee1-af98-b146012dd36e)
+
 
 <hr>
 <h2>Result:</h2>
